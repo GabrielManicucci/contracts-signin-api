@@ -11,6 +11,7 @@ export class ContractsRepository implements IContractsRepository {
         data: data.data as any,
         companyId: data.companyId,
         templateId: data.templateId,
+        obraId: data.obraId,
       },
     });
 

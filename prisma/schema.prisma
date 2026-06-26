@@ -76,6 +76,7 @@ model Contract {
   id         String         @id @default(uuid())
   companyId  String
   templateId String
+  obraId     String?
   title      String
   status     ContractStatus @default(DRAFT)
   data       Json // Preenchimento dos campos dinâmicos do template
@@ -84,22 +85,28 @@ model Contract {
 
   company  Company          @relation(fields: [companyId], references: [id])
   template ContractTemplate @relation(fields: [templateId], references: [id])
-  obras    Obra[]
+  obra     Obra?            @relation(fields: [obraId], references: [id])
 
   @@map("contracts")
 }
 
-model Obra {
-  id         String   @id @default(uuid())
-  companyId  String
-  contractId String
-  name       String
-  status     String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+enum ObraStatus {
+  PLANEJAMENTO
+  EM_ANDAMENTO
+  PARALISADA
+  CONCLUIDA
+}
 
-  company  Company  @relation(fields: [companyId], references: [id])
-  contract Contract @relation(fields: [contractId], references: [id])
+model Obra {
+  id        String     @id @default(uuid())
+  companyId String
+  name      String
+  status    ObraStatus @default(PLANEJAMENTO)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  company   Company    @relation(fields: [companyId], references: [id])
+  contracts Contract[]
 
   @@map("obras")
 }
