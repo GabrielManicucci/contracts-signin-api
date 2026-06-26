@@ -14,10 +14,11 @@ export class ContractsController {
   async create(req: Request, res: Response): Promise<Response> {
     try {
       const companyId = req.tenant!.companyId;
-      const { templateId, title, data } = req.body;
+      const { templateId, obraId, title, data } = req.body;
 
       const contract = await this.createContractUseCase.execute({
         templateId,
+        obraId,
         title,
         data,
         companyId,

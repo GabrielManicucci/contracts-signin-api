@@ -13,6 +13,7 @@ export class CreateContractUseCase {
     const parsedData = createContractSchema.parse({
       title: data.title,
       templateId: data.templateId,
+      obraId: data.obraId,
       data: data.data,
     });
 
