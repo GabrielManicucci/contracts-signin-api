@@ -32,9 +32,13 @@ Com base nas definições do PDF e no refinamento de escopo focado no back-end (
 ### 1.4 Módulo de Assinatura Eletrônica
 *   **Regras:** Fluxo de disparo e atualização de status do contrato.
 *   **Funcionalidades:**
-    *   Disparo de link de assinatura via **E-mail (usando Resend)**.
-    *   Callback/Webhook para capturar assinatura das partes.
-    *   Atualização automática de status para *Assinado*.
+    *   Endpoint para disparar o contrato para assinatura (envia um link único via email usando Resend).
+    *   Endpoint público (sem token) para que a outra parte possa assinar o contrato.
+    *   Atualização do status do contrato (WAITING_FOR_SIGNATURE -> SIGNED).
+    
+> **Nota de Arquitetura (Variáveis de Ambiente):**
+> Foi adicionada a variável de ambiente `FRONTEND_URL` no `.env`. Ela é utilizada para montar dinamicamente o link que será enviado por e-mail para a assinatura do contrato.
+> Em ambiente local, ela deve apontar para `http://localhost:5173` (ou a porta do seu front-end). Em produção, deve apontar para o domínio real (`https://app.suaempresa.com`). Isso garante que os links enviados por e-mail sempre abram na aplicação visual correta, independente de onde o back-end esteja hospedado.
 
 ### 1.5 Módulo de Obras
 *   **Regras:** Gestão básica de obras vinculadas a contratos. Demais features financeiras (custos, orçamentos e compras) ficam como "Nice to have" para o fim do prazo.

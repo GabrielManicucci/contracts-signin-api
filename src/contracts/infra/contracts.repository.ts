@@ -24,6 +24,12 @@ export class ContractsRepository implements IContractsRepository {
     });
   }
 
+  async findById(id: string): Promise<Contract | null> {
+    return prisma.contract.findUnique({
+      where: { id },
+    });
+  }
+
   async findByIdAndCompanyId(id: string, companyId: string): Promise<Contract | null> {
     return prisma.contract.findFirst({
       where: { id, companyId },
@@ -34,6 +40,13 @@ export class ContractsRepository implements IContractsRepository {
           }
         }
       }
+    });
+  }
+
+  async updateStatus(id: string, status: any): Promise<Contract> {
+    return prisma.contract.update({
+      where: { id },
+      data: { status },
     });
   }
 }
