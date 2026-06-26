@@ -1,0 +1,235 @@
+Teste Técnico
+ Sistema de Controle de Contratos
+ & Gestão Orçamentária
+ React + Vite
+ Node.js + Express
+ Prisma + PostgreSQL
+ TailwindCSS
+1. Objetivo do Projeto
+Desenvolver um sistema SaaS local para controle de contratos e gestão orçamentária, cobrindo
+desde a criação e assinatura eletrônica de contratos até o acompanhamento financeiro e
+operacional de obras e manutenções. O sistema deve integrar fluxo de assinatura, gerenciamento
+documental, controle orçamentário e geração de ordens de compra em uma única plataforma.
+2. Stack Obrigatória
+Camada
+Tecnologia
+Responsabilidade
+Front-end
+React + Vite
+SPA responsiva e builder visual
+Estilização
+TailwindCSS
+Design system consistente
+Estado Global
+Zustand
+Gerenciamento de estado
+Back-end
+Node.js + Express
+API REST e lógica de negócio
+ORM
+Prisma
+Mapeamento e migrations
+Banco de Dados
+PostgreSQL + pgvector
+Persistência e busca semântica
+Autenticação
+JWT / Sessions
+Controle de acesso multi-tenant
+3. Módulos do Sistema
+3.1 — Módulo de Gestão de Contratos
+O módulo central do sistema. Deve cobrir todo o ciclo de vida dos contratos da empresa, desde a
+criação até o arquivamento pós-assinatura.
+Funcionalidades obrigatórias:
+ Listagem de todos os contratos celebrados pela empresa com filtros e busca
+ Biblioteca de templates de contratos: prestação de serviço, contrato de trabalho, contrato de
+obra, contrato de locação, entre outros
+
+ Campos dinâmicos editáveis por template: horários, endereços, partes relacionadas, valores e
+campos de assinatura correspondente
+ Criação de novo contrato a partir de template com preenchimento guiado
+ Visualização completa do contrato antes de encaminhar para assinatura
+3.2 — Módulo de Assinatura Eletrônica
+Após a criação, o contrato deve ser encaminhado para assinatura das partes relacionadas.
+Canal
+Descrição
+Status
+E-mail
+Envio do link de assinatura por e-mail
+Obrigatório
+WhatsApp
+Envio via WhatsApp (link ou mensagem)
+Obrigatório
+Ambos
+Disparo simultâneo nos dois canais
+Obrigatório
+ Sinalizador visual de status: Aguardando assinatura / Assinado / Expirado
+ Notificação automática ao sistema quando contrato for assinado
+ Contrato assinado movido automaticamente para repositório de contratos vigentes
+ Histórico de envios e tentativas de assinatura por contrato
+3.3 — Gerenciador de Contratos (Painel de Acompanhamento)
+Tela de gestão e visibilidade dos contratos ativos, com informações essenciais consolidadas.
+Campo
+Descrição
+Parte Relacionada
+Nome/Razão social do contratado ou contratante
+Tipo de Contrato
+Categoria (trabalho, obra, locação, serviço, etc.)
+Valor do Contrato
+Valor total ou mensal pactuado
+Data de Início
+Início da vigência
+Data de Encerramento
+Término previsto da vigência
+Vigência Restante
+Cálculo automático em dias/meses até o vencimento
+Status
+Ativo / Vencendo / Encerrado / Aguardando assinatura
+Ações Rápidas
+Visualizar, Renovar, Encerrar, Gerar aditivo
+3.4 — Módulo de Gestão de Obras
+Módulo específico para acompanhamento operacional e financeiro de obras. O candidato deve
+pesquisar boas práticas de mercado para gestão de obras e implementar os pontos gerenciais
+mais relevantes, especialmente:
+ Roteiro de obra: checklist de etapas e marcos por fase (planejamento, execução, entrega)
+
+ Controle orçamentário: orçamento previsto vs. realizado por obra
+ Vistoria inicial: registro fotográfico e descritivo do estado antes da obra
+ Vistoria final: comparativo com estado inicial, registro de conclusão
+ Registro de manutenções: histórico de intervenções realizadas no local
+ Controle de custos: lançamento e categorização de despesas por obra
+ Geração de Ordem de Compra: emissão de O.C. vinculada à obra, com seleção do CNPJ
+pagador
+ Vinculação com contrato: possibilidade de associar a obra ao contrato de locação ou serviço
+de origem
+■ ATENÇÃO: O candidato NÃO deve consultar o time interno sobre processos de obra. A avaliação inclui a
+capacidade de pesquisa e conformidade com práticas de mercado.
+4. Estrutura Esperada do Banco de Dados
+Tabela
+Descrição Principal
+companies
+Entidades multi-tenant (empresas)
+users
+Usuários por empresa com controle de perfil
+contracts
+Contratos com status, datas e vínculos
+contract_templates
+Templates base com campos parametrizáveis
+contract_template_fields
+Campos editáveis por template
+signature_requests
+Solicitações de assinatura por canal (e-mail/WhatsApp)
+obras
+Projetos de obra vinculados a empresa e contrato
+obra_steps
+Etapas do roteiro de obra
+obra_vistorias
+Registros de vistoria (inicial/final) com fotos
+obra_custos
+Lançamentos de custo por obra
+purchase_orders
+Ordens de compra vinculadas a obras
+uploads
+Arquivos e imagens por entidade
+audit_logs
+Log de ações para rastreabilidade
+5. Fluxo Esperado da Aplicação
+ 1
+Usuário cria contrato a partir de um template ou do zero
+ 2
+Preenche campos parametrizáveis (partes, valores, datas, assinaturas)
+
+3
+Sistema salva o contrato com status 'Rascunho'
+ 4
+Usuário encaminha para assinatura via e-mail e/ou WhatsApp
+ 5
+Partes recebem link e realizam a assinatura
+ 6
+Sistema atualiza status para 'Assinado' com sinalizador visual
+ 7
+Contrato assinado é arquivado e visível no Gerenciador
+ 8
+Usuário pode vincular obra ao contrato e iniciar gestão de obra
+ 9
+Obra segue roteiro: vistoria inicial → execução → custos → O.C. → vistoria final
+ 10
+Dashboard consolida métricas de contratos e obras
+6. Páginas e Navegação
+Contratos & Assinaturas
+ Dashboard Principal — KPIs de
+contratos e obras
+ Contratos — Listagem e filtros avançados
+ Templates — Biblioteca de modelos
+ Novo Contrato — Criação e
+preenchimento guiado
+ Assinaturas — Fila e status de
+assinaturas pendentes
+ Gerenciador de Contratos — Contratos
+ativos com vigência
+Obras & Configurações
+ Obras — Listagem de projetos de obra
+ Detalhe de Obra — Roteiro, custos,
+vistorias, O.C.
+ Ordens de Compra — Emissão e
+acompanhamento
+ Relatórios — Exportação e consultas
+ Parametrização — Configurações do
+sistema
+ Gestão de Usuários — Multi-tenant por
+empresa
+7. Diferenciais Técnicos Avaliados
+ Arquitetura multi-tenant (isolamento por
+empresa)
+ Modelagem de dados normalizada e
+escalável
+ Integração entre módulos (contrato ↔ obra
+↔ O.C.)
+ Cálculo automático de vigência e alertas
+ Upload de arquivos (fotos de vistoria,
+documentos)
+ Dashboard com métricas reais do banco
+ Fluxo de assinatura com rastreabilidade
+ Geração de Ordem de Compra com CNPJ
+pagador
+ Menu de relatórios e parametrização
+ Pesquisa e conformidade com práticas de
+mercado
+
+8. Critérios de Avaliação
+Critério
+Peso
+Descrição
+Arquitetura e Organização
+Alto
+Clean code, separação de responsabilidades, estrutura de pastas
+Modelagem de Dados
+Alto
+Banco bem estruturado, relacionamentos corretos, migrations Prisma
+Fluxo de Contratos
+Alto
+Templates, preenchimento, envio e status de assinatura funcionais
+Gestão de Obras
+Alto
+Roteiro, vistorias, custos e O.C. com vinculação ao contrato
+Pesquisa e Conformidade
+Médio
+Boas práticas de mercado aplicadas ao módulo de obras
+UX/UI
+Médio
+Interface clara, responsiva e com boa usabilidade
+Dashboard e Relatórios
+Médio
+Métricas relevantes e menu de relatórios funcional
+Integração entre Módulos
+Médio
+Dados fluem corretamente entre contratos, obras e O.C.
+9. Entrega Esperada
+✓ Repositório Git completo com histórico de commits organizado
+✓ README com instruções de instalação, configuração e execução local
+✓ Banco de dados configurado via Prisma com migrations funcionais
+✓ Arquivo .env.example com todas as variáveis necessárias
+✓ Sistema funcional rodando localmente, pronto para demonstração ao time
+✓ Projeto apresentado ao final do dia — o time irá testar no dia seguinte
+ Boa sorte! A avaliação foca em arquitetura, qualidade de código, capacidade de pesquisa e entrega de um
+ produto funcional e bem estruturado.
+
