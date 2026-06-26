@@ -73,15 +73,14 @@ model ContractTemplateField {
 }
 
 model Contract {
-  id            String         @id @default(uuid())
-  companyId     String
-  templateId    String
-  title         String
-  status        ContractStatus @default(DRAFT)
-  data          Json // Preenchimento dos campos dinâmicos do template
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  contractValue Decimal?       @db.Decimal(10, 2)
+  id         String         @id @default(uuid())
+  companyId  String
+  templateId String
+  title      String
+  status     ContractStatus @default(DRAFT)
+  data       Json // Preenchimento dos campos dinâmicos do template
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
 
   company  Company          @relation(fields: [companyId], references: [id])
   template ContractTemplate @relation(fields: [templateId], references: [id])
