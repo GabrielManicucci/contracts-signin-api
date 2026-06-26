@@ -3,6 +3,7 @@ import { prisma } from "../../shared/infra/prisma/index";
 import type {
   ICreateUserDTO,
   IUsersRepository,
+  IUpdateUserDTO,
 } from "../domain/users.interface.repository";
 
 export class UsersRepository implements IUsersRepository {
@@ -28,6 +29,15 @@ export class UsersRepository implements IUsersRepository {
   async findById(id: string): Promise<User | null> {
     const user = await prisma.user.findUnique({
       where: { id },
+    });
+    return user;
+  }
+
+  async update(data: IUpdateUserDTO): Promise<User> {
+    const { id, ...updateData } = data;
+    const user = await prisma.user.update({
+      where: { id },
+      data: updateData,
     });
     return user;
   }
