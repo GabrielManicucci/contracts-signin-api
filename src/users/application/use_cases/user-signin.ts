@@ -1,25 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { z } from "zod";
 import type { IUsersRepository } from "../../domain/users.interface.repository";
 import { AppError } from "../../../shared/errors/AppError";
-
-const signInSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-});
-
-type SignInRequest = z.infer<typeof signInSchema>;
-
-interface SignInResponse {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    companyId: string | null;
-  };
-  token: string;
-}
+import { signInSchema, type SignInRequest } from "../../domain/users.dto.request";
+import type { SignInResponse } from "../../domain/users.dto.response";
 
 export class SignInUseCase {
   constructor(private usersRepository: IUsersRepository) {}
