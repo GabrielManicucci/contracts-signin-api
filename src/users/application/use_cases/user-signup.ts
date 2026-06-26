@@ -1,20 +1,13 @@
 import bcrypt from "bcrypt";
-import { z } from "zod";
 import type { IUsersRepository } from "../../domain/users.interface.repository";
 import { AppError } from "../../../shared/errors/AppError";
-
-const signUpSchema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
-  password: z.string().min(6),
-});
-
-type SignUpRequest = z.infer<typeof signUpSchema>;
+import { signUpSchema, type SignUpRequest } from "../../domain/users.dto.request";
+import type { SignUpResponse } from "../../domain/users.dto.response";
 
 export class SignUpUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
-  async execute(data: SignUpRequest) {
+  async execute(data: SignUpRequest): Promise<SignUpResponse> {
     const { email, name, password } = signUpSchema.parse(data);
 
     const userAlreadyExists = await this.usersRepository.findByEmail(email);
